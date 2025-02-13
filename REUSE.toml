@@ -1,0 +1,13 @@
+version = 1
+
+[[annotations]]
+path = ["README.md"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2025 Clifford Weinmann <https://www.cliffordweinmann.com/>"
+SPDX-License-Identifier = "MIT-0"
+
+[[annotations]]
+path = ["vigil-local.cfg.example"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2022 Valerian Saliou <https://github.com/valeriansaliou>"
+SPDX-License-Identifier = "MPL-2.0"

@@ -1,0 +1,51 @@
+# Vigil Local
+# Vigil local probe relay
+# Configuration file
+# Example from: https://github.com/valeriansaliou/vigil-local/blob/master/config.cfg
+
+
+[server]
+
+log_level = "debug"
+
+[report]
+
+endpoint = "https://status.example.com"
+token = "YOUR_TOKEN_SECRET"
+
+[metrics]
+
+interval = 120
+
+poll_retry = 2
+
+poll_delay_dead = 10
+poll_delay_sick = 1
+
+[probe]
+
+[[probe.service]]
+
+id = "internal"
+
+[[probe.service.node]]
+
+id = "gateway"
+mode = "poll"
+
+replicas = [
+  "icmp://127.0.0.1",
+  "icmp://192.168.1.1"
+]
+
+[[probe.service.node]]
+
+id = "capacity"
+mode = "script"
+
+scripts = [
+  '''
+  # Consider as healthy
+  exit 0
+  '''
+]
