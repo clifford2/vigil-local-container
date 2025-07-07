@@ -2,9 +2,10 @@
 #
 # SPDX-License-Identifier: MIT-0
 
-FROM docker.io/amd64/alpine:3.21.2
+FROM docker.io/amd64/alpine:3.22.0
 
 ARG VIGIL_LOCAL_VER=1.2.0
+ARG RELEASE_VERSION=2
 
 # Release tarballs contain:
 #  ./vigil-local/

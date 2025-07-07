@@ -13,7 +13,7 @@ endif
 ifeq ($(CONTAINER_ENGINE),podman)
 	BUILDARCH := $(shell podman version --format '{{.Client.OsArch}}' | cut -d/ -f2)
 	BUILD_NOLOAD := podman build
-	BUILD_CMD := $(BUILD_NOLOAD) --dns 1.1.1.1
+	BUILD_CMD := $(BUILD_NOLOAD)
 else
 	BUILDARCH := $(shell docker version --format '{{.Client.Arch}}')
 	BUILD_NOLOAD := docker buildx build
@@ -22,7 +22,7 @@ endif
 # Get current versions
 IMAGE_NAME := docker.io/cliffordw/vigil-local
 VIGIL_LOCAL_VER := $(shell grep '^ARG VIGIL_LOCAL_VER' Containerfile | cut -d= -f2)
-RELEASE_VERSION := 1
+RELEASE_VERSION := $(shell grep '^ARG RELEASE_VERSION' Containerfile | cut -d= -f2)
 IMAGE_TAG := v$(VIGIL_LOCAL_VER)-$(RELEASE_VERSION)
 
 
