@@ -21,5 +21,5 @@ An image build from this code is available on Docker Hub as [cliffordw/vigil-loc
 You can run it with:
 
 ```sh
-podman run -d --rm --name vigil-local -v $PWD/vigil-local.cfg:/etc/vigil-local.cfg:ro,Z docker.io/cliffordw/vigil-local:v1.2.0-2
+podman run -d --rm --name vigil-local -v $PWD/vigil-local.cfg:/etc/vigil-local.cfg:ro,Z docker.io/cliffordw/vigil-local:v1.2.2-1
 ```
