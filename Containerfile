@@ -1,11 +1,13 @@
 # SPDX-FileCopyrightText: © 2024 Clifford Weinmann <https://www.cliffordweinmann.com/>
 #
 # SPDX-License-Identifier: MIT-0
+#
+# Build with: make build
 
-FROM docker.io/amd64/alpine:3.22.2
+FROM docker.io/amd64/alpine:3.23.0
 
-ARG VIGIL_LOCAL_VER=1.2.1
-ARG RELEASE_VERSION=1
+ARG VIGIL_LOCAL_VER
+ARG RELEASE_VERSION
 
 # Release tarballs contain:
 #  ./vigil-local/
@@ -19,4 +21,23 @@ RUN echo 'Download vigil-local' \
 	&& chmod 0755 /usr/local/bin/vigil-local \
 	&& rm -r vigil-local.tar.gz vigil-local
 
+# BUILD_DATE should break old caches of the update & upgrade layers
+ARG BUILD_DATE
+RUN echo "${BUILD_DATE}"
+RUN apk --no-cache update
+RUN apk --no-cache upgrade
+
 CMD [ "/usr/local/bin/vigil-local", "-c", "/etc/vigil-local.cfg" ]
+
+LABEL maintainer="Clifford Weinmann <https://www.cliffordweinmann.com/>"
+LABEL org.opencontainers.image.authors="Clifford Weinmann <https://www.cliffordweinmann.com/>"
+LABEL org.opencontainers.image.description="Vigil Local"
+LABEL org.opencontainers.image.licenses="MPL-2.0"
+LABEL org.opencontainers.image.source="https://github.com/clifford2/vigil-local-container"
+LABEL org.opencontainers.image.title="vigil-local"
+LABEL org.opencontainers.image.url="https://github.com/clifford2/vigil-local-container"
+
+ARG IMAGE_VERSION
+LABEL org.opencontainers.image.version="${IMAGE_VERSION}"
+ARG BUILD_TIME
+LABEL org.opencontainers.image.created="${BUILD_TIME}"
