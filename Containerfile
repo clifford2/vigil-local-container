@@ -7,7 +7,6 @@
 FROM docker.io/amd64/alpine:3.23.0
 
 ARG VIGIL_LOCAL_VER
-ARG RELEASE_VERSION
 
 # Release tarballs contain:
 #  ./vigil-local/
