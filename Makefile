@@ -51,7 +51,7 @@ help:
 .PHONY: build
 build: .check-depends
 	$(BUILD_CMD) --pull --build-arg VIGIL_LOCAL_VER=$(VIGIL_LOCAL_VER) --build-arg BUILD_DATE=$(BUILD_DATE) --build-arg BUILD_TIME=$(BUILD_TIME) --build-arg IMAGE_VERSION=$(IMAGE_VERSION) -t $(IMGBASENAME):$(IMAGE_VERSION) .
-	$(CONTAINER_ENGINE) run --rm -it $(IMGBASENAME):$(IMAGE_VERSION) vigil-local --version
+	$(CONTAINER_ENGINE) run --rm -t $(IMGBASENAME):$(IMAGE_VERSION) vigil-local --version
 
 .PHONY: tag
 tag:
