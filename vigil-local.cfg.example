@@ -1,16 +1,18 @@
-# Vigil Local
 # Vigil local probe relay
 # Configuration file
-# Example from: https://github.com/valeriansaliou/vigil-local/blob/master/config.cfg
+# Example based on: https://github.com/valeriansaliou/vigil-local/blob/master/config.cfg
 
 
 [server]
 
+# debug, info, warn, error, default: error
 log_level = "debug"
 
 [report]
 
+# URL of Vigil server to report status to
 endpoint = "https://status.example.com"
+# Server's reporter_token (as configured on Server's config file)
 token = "YOUR_TOKEN_SECRET"
 
 [metrics]

@@ -16,10 +16,15 @@ This code builds a container image for `vigil-local` **with a BusyBox shell to s
 
 ## Run
 
-An image build from this code is available on Docker Hub as [cliffordw/vigil-local](https://hub.docker.com/r/cliffordw/vigil-local).
+To use this image, you need to create a configuration file first. See the "Configuration" section of Valerian's [repo](https://github.com/valeriansaliou/vigil-local), or the [`vigil-local.cfg.example`](vigil-local.cfg.example) sample file in this repo.
+
+An image build from this code is available in the [GitHub container registry](https://github.com/clifford2/vigil-local-container/pkgs/container/vigil-local).
 
 You can run it with:
 
 ```sh
-podman run -d --rm --name vigil-local -v ./vigil-local.cfg:/etc/vigil-local.cfg:ro,Z ghcr.io/clifford2/vigil-local:v1.2.6-1.20251207
+podman run -d --rm \
+  --name vigil-local \
+  -v ./vigil-local.cfg:/etc/vigil-local.cfg:ro,Z \
+  ghcr.io/clifford2/vigil-local:v1.2.6-1.20251207
 ```
