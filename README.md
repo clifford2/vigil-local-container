@@ -12,13 +12,13 @@ A Vigil Local container image with probe script support.
 
 Valerian Saliou, the author of Vigil, makes a container image available on Docker Hub as [valeriansaliou/vigil-local](https://hub.docker.com/r/valeriansaliou/vigil-local/). It is built `FROM scratch`, which means probe scripts don't work.
 
-This code builds a container image for `vigil-local` **with a BusyBox shell to support probe scripts**. It supports only `x86_64` for now.
+This code builds a container image for `vigil-local` **with a BusyBox shell to support probe scripts**. It is currently tested on only `x86_64` only, but can be built for `aarch64` too.
 
 ## Run
 
 To use this image, you need to create a configuration file first. See the "Configuration" section of Valerian's [repo](https://github.com/valeriansaliou/vigil-local), or the [`vigil-local.cfg.example`](vigil-local.cfg.example) sample file in this repo.
 
-An image build from this code is available in the [GitHub container registry](https://github.com/clifford2/vigil-local-container/pkgs/container/vigil-local).
+A `x86_64` container image build from this code is available in the [GitHub container registry](https://github.com/clifford2/vigil-local-container/pkgs/container/vigil-local).
 
 You can run it with:
 
