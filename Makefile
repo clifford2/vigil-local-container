@@ -33,7 +33,7 @@ ifeq ($(CONTAINER_ENGINE),podman)
 	BUILD_CMD := $(BUILD_NOLOAD)
 else
 	BUILDARCH := $(shell docker version --format '{{.Client.Arch}}')
-	BUILD_NOLOAD := docker buildx build
+	BUILD_NOLOAD := docker buildx build -f Containerfile
 	BUILD_CMD := $(BUILD_NOLOAD) --load
 endif
 
