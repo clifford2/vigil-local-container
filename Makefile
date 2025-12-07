@@ -3,9 +3,14 @@
 # SPDX-License-Identifier: MIT-0
 
 # Set current versions
-IMAGE_NAME := docker.io/cliffordw/vigil-local
+# REGISTRY_NAME := ghcr.io
+# REGISTRY_USER := clifford2
+# REPOBASE := $(REGISTRY_NAME)/$(REGISTRY_USER)
+IMGBASENAME := vigil-local
+IMGRELNAME := $(REPOBASE)/$(IMGBASENAME)
 VIGIL_LOCAL_VER := 1.2.6
 RELEASE_VERSION := 1
+GIT_TAG := $(VIGIL_LOCAL_VER)-$(RELEASE_VERSION)
 # Add date into release version to distinguish between image differences resulting from `apk update` & `apk upgrade` steps
 BUILD_DATE := $(shell TZ=UTC date '+%Y-%m-%d')
 IMAGE_RELEASE := $(RELEASE_VERSION).$(shell TZ=UTC date '+%Y%m%d')
@@ -40,26 +45,57 @@ help:
 	@echo "BUILD_DATE = [$(BUILD_DATE)]"
 	@echo "IMAGE_RELEASE = [$(IMAGE_RELEASE)]"
 	@echo "IMAGE_VERSION = [$(IMAGE_VERSION)]"
-	@echo "There is no default target for $(IMAGE_NAME):$(IMAGE_VERSION) yet - please pick a suitable target manually"
+	@echo "There is no default target for $(IMGBASENAME):$(IMAGE_VERSION) yet - please pick a suitable target manually"
 	@echo "We're using $(CONTAINER_ENGINE) on $(BUILDARCH)"
 
 .PHONY: build
-build:
-	$(BUILD_CMD) --pull --build-arg VIGIL_LOCAL_VER=$(VIGIL_LOCAL_VER) --build-arg BUILD_DATE=$(BUILD_DATE) --build-arg BUILD_TIME=$(BUILD_TIME) --build-arg IMAGE_VERSION=$(IMAGE_VERSION) -t $(IMAGE_NAME):$(IMAGE_VERSION) .
-	$(CONTAINER_ENGINE) run --rm -it $(IMAGE_NAME):$(IMAGE_VERSION) vigil-local --version
+build: .check-depends
+	$(BUILD_CMD) --pull --build-arg VIGIL_LOCAL_VER=$(VIGIL_LOCAL_VER) --build-arg BUILD_DATE=$(BUILD_DATE) --build-arg BUILD_TIME=$(BUILD_TIME) --build-arg IMAGE_VERSION=$(IMAGE_VERSION) -t $(IMGBASENAME):$(IMAGE_VERSION) .
+	$(CONTAINER_ENGINE) run --rm -it $(IMGBASENAME):$(IMAGE_VERSION) vigil-local --version
 
-.PHONY: git-push
-git-push:
+.PHONY: tag
+tag:
+	$(CONTAINER_ENGINE) tag $(IMGBASENAME):$(IMAGE_VERSION) $(IMGRELNAME):$(IMAGE_VERSION)
+	$(CONTAINER_ENGINE) tag $(IMGBASENAME):$(IMAGE_VERSION) $(IMGRELNAME):v$(VIGIL_LOCAL_VER)
+	$(CONTAINER_ENGINE) tag $(IMGBASENAME):$(IMAGE_VERSION) $(IMGRELNAME):latest
+
+.PHONY: push
+push: .check-depends tag
+	test ! -z "$(REGISTRY_NAME)" && $(CONTAINER_ENGINE) login -u $(REGISTRY_USER) $(REGISTRY_NAME)|| echo 'Not logging into registry'
+	$(CONTAINER_ENGINE) push $(IMGRELNAME):$(IMAGE_VERSION)
+	$(CONTAINER_ENGINE) push $(IMGRELNAME):v$(VIGIL_LOCAL_VER)
+	$(CONTAINER_ENGINE) push $(IMGRELNAME):latest
+
+.PHONY: all
+all: build push
+
+.PHONY: .git-commit
+.git-commit: .check-git-deps
 	@git add .
 	@git commit
-	@git tag "$(VIGIL_LOCAL_VER)-$(RELEASE_VERSION)"
+
+.PHONY: .git-tag
+.git-tag: .check-git-deps
+	@git tag -m "Version $(GIT_TAG)" "$(GIT_TAG)"
+
+.PHONY: .git-push
+.git-push: .check-git-deps
 	@git push --follow-tags
 
-.PHONY: docker-push
-docker-push:
-	$(CONTAINER_ENGINE) login docker.io
-	$(CONTAINER_ENGINE) push $(IMAGE_NAME):$(IMAGE_VERSION)
-	$(CONTAINER_ENGINE) tag $(IMAGE_NAME):$(IMAGE_VERSION) $(IMAGE_NAME):v$(VIGIL_LOCAL_VER)
-	$(CONTAINER_ENGINE) push $(IMAGE_NAME):v$(VIGIL_LOCAL_VER)
-	$(CONTAINER_ENGINE) tag $(IMAGE_NAME):$(IMAGE_VERSION) $(IMAGE_NAME):latest
-	$(CONTAINER_ENGINE) push $(IMAGE_NAME):latest
+# git tag & push
+.PHONY: git-tag-push
+git-tag-push: .git-tag .git-push
+
+# git commit, tag & push
+.PHONY: git-commit-tag-push
+git-commit-tag-push: .git-commit .git-tag .git-push
+
+# Verify that we have git installed
+.PHONY: .check-git-deps
+.check-git-deps:
+	command -v git
+
+# Verify that we have all required dependencies installed
+.PHONY: .check-depends
+.check-depends:
+	command -v podman || command -v docker
