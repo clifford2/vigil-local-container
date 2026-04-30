@@ -4,7 +4,7 @@
 #
 # Build with: make build
 
-FROM docker.io/library/alpine:3.23.0
+FROM docker.io/library/alpine:3.23.4
 
 ARG VIGIL_LOCAL_VER
 

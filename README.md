@@ -14,6 +14,15 @@ Valerian Saliou, the author of Vigil, makes a container image available on Docke
 
 This code builds a container image for `vigil-local` **with a BusyBox shell to support probe scripts**. It is currently tested on only `x86_64` only, but can be built for `aarch64` too.
 
+## Build
+
+Build your own copy of this image with:
+
+```sh
+make build
+make REPOBASE=ghcr.io/clifford2 push
+```
+
 ## Run
 
 To use this image, you need to create a configuration file first. See the "Configuration" section of Valerian's [repo](https://github.com/valeriansaliou/vigil-local), or the [`vigil-local.cfg.example`](vigil-local.cfg.example) sample file in this repo.
@@ -26,5 +35,5 @@ You can run it with:
 podman run -d --rm \
   --name vigil-local \
   -v ./vigil-local.cfg:/etc/vigil-local.cfg:ro,Z \
-  ghcr.io/clifford2/vigil-local:v1.2.6-1.20251207
+  ghcr.io/clifford2/vigil-local:v1.2.6-2.20260430
 ```

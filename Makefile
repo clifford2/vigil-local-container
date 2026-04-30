@@ -9,7 +9,7 @@
 IMGBASENAME := vigil-local
 IMGRELNAME := $(REPOBASE)/$(IMGBASENAME)
 VIGIL_LOCAL_VER := 1.2.6
-RELEASE_VERSION := 1
+RELEASE_VERSION := 2
 GIT_TAG := $(VIGIL_LOCAL_VER)-$(RELEASE_VERSION)
 # Add date into release version to distinguish between image differences resulting from `apk update` & `apk upgrade` steps
 BUILD_DATE := $(shell TZ=UTC date '+%Y-%m-%d')
